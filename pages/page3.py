@@ -32,10 +32,7 @@ layout = html.Div(children=[
         ''',style={'textAlign': 'center'}),
 
     dcc.RadioItems(
-    options=[
-       {'label': 'Shorthouse et al  ', 'value': 'shorthouse'},
-       {'label': 'Cherkaoui et al', 'value': 'cherkaoui'}], value = 'shorthouse',
-    inline=True, style={'textAlign': 'center'}, inputStyle={"margin-right": "5px", "margin-left": "5px"},
+    value = 'shorthouse',
     id = 'dataset_type'),
     html.Div([
 
@@ -75,8 +72,6 @@ layout = html.Div(children=[
 def set_dropdown_options_page3_1(dataset):
     if dataset == "shorthouse":
         pathway_dropdown = [{'label': i, 'value': i} for i in drugsensitivity_shorthouse.index.tolist()[1:]]
-    elif dataset == "cherkaoui":
-        pathway_dropdown = [{'label': i, 'value': i} for i in drugsensitivity_cherkaoui.index.tolist()[1:]]
     return pathway_dropdown
 
 @app.callback(
@@ -86,8 +81,6 @@ def set_dropdown_options_page3_1(dataset):
 def set_dropdown_options_page3_2(dataset):
     if dataset == "shorthouse":
         drug_dropdown = [{'label': i, 'value': i} for i in drugsensitivity_shorthouse.columns]
-    elif dataset == "cherkaoui":
-        drug_dropdown = [{'label': i, 'value': i} for i in drugsensitivity_cherkaoui.columns]
     return drug_dropdown
 
 
@@ -101,8 +94,6 @@ def set_dropdown_options_page3_2(dataset):
 def drug_sensitivity_by_pathway_plot(pathway_name, dataset):
     if dataset == "shorthouse":
         pathway_dataframe = drugsensitivity_shorthouse
-    elif dataset == "cherkaoui":
-        pathway_dataframe = drugsensitivity_cherkaoui
     pathway = pd.DataFrame(pathway_dataframe.loc[pathway_name].sort_values())
     pathway.columns = ["log10(Pvalue) * correlation direction"]
     pathway["Drug"] = pathway.index
@@ -127,8 +118,6 @@ def drug_sensitivity_by_pathway_plot(pathway_name, dataset):
 def pathway_ranking_by_drug_plot(drug_name, dataset):
     if dataset == "shorthouse":
         pathway_dataframe = drugsensitivity_shorthouse.T
-    elif dataset == "cherkaoui":
-        pathway_dataframe = drugsensitivity_cherkaoui.T
     pathway = pd.DataFrame(pathway_dataframe.loc[drug_name].sort_values())
     pathway.columns = ["log10(Pvalue) * correlation direction"]
     pathway["SMPDB Pathway"] = pathway.index

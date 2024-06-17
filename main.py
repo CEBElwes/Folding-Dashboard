@@ -16,7 +16,6 @@ nav = navbar.Navbar()
 
 app.config.suppress_callback_exceptions = True
 
-
 # Define the index page layout
 app.layout = html.Div([
     dcc.Location(id='url', refresh=False),
@@ -87,7 +86,6 @@ def update_graph2(mutation_name, dataset):
     Input(component_id = "mutation_id", component_property = "value"),
     Input(component_id = "dataset_type", component_property = "value")]
 )
-
 def update_graph3(metabolite_id_value, mutation_gene, dataset):
     graph = page1.swarmplot_per_metabolite_permutation(metabolite_id_value, mutation_gene, dataset)
     return graph
@@ -108,7 +106,6 @@ def update_graph_TFheatmap(dataset):
     Output(component_id = "pathway", component_property = "options"),
     [Input(component_id = "dataset_type", component_property = "value")]
 )
-
 def update_dropdownpathways(dataset):
     dropdownlist = page2.set_dropdown_options_1(dataset)
     return dropdownlist
@@ -118,7 +115,6 @@ def update_dropdownpathways(dataset):
     Output(component_id = "TF", component_property = "options"),
     [Input(component_id = "dataset_type", component_property = "value")]
 )
-
 def update_dropdownTFS(dataset):
     dropdownlist = page2.set_dropdown_options_2(dataset)
     return dropdownlist
@@ -139,7 +135,6 @@ def update_graph4(pathway_name, dataset):
     [Input(component_id = "TF", component_property = "value"),
     Input(component_id = "dataset_type", component_property = "value")]
 )
-
 def update_graph5(TF_name, dataset):
     graph = page2.pathway_ranking_by_TF_id_plot(TF_name, dataset)
     return graph
@@ -148,47 +143,38 @@ def update_graph5(TF_name, dataset):
 
 ## Callbacks for dropdowns
 @app.callback(
-    Output(component_id = "pathway2", component_property = "options"),
+    Output(component_id = "gene", component_property = "options"),
     [Input(component_id = "dataset_type", component_property = "value")]
 )
-
 def update_dropdown_page3_1(dataset):
-    dropdownlist = page3.set_dropdown_options_page3_1(dataset)
+    dropdownlist = page3.set_dropdown_options_page3_1("ddg")
     return dropdownlist
 
 @app.callback(
-    Output(component_id = "drug", component_property = "options"),
+    Output(component_id = "variant", component_property = "options"),
     [Input(component_id = "dataset_type", component_property = "value")]
 )
-
 def update_dropdown_page3_2(dataset):
-    dropdownlist = page3.set_dropdown_options_page3_2(dataset)
+    dropdownlist = page3.set_dropdown_options_page3_2("dgg")
     return dropdownlist
 
-## Callback for drug sensitivity per pathway
+## Callback for dgg by gene
 @app.callback(
-    Output(component_id = "drug_sensitivity_by_pathway", component_property = "figure"),
-    [Input(component_id = "pathway2", component_property = "value"),
-    Input(component_id = "dataset_type", component_property = "value")]
+    Output(component_id = "ddg_by_gene", component_property = "figure"),
+    [Input(component_id = "gene", component_property = "value")]
 )
-
-def update_graph6(pathway_name, dataset):
-    graph = page3.drug_sensitivity_by_pathway_plot(pathway_name, dataset)
+def update_graph6(gene_name):
+    graph = page3.ddg_by_gene_plot(gene_name, "ddg")
     return graph
 
-## Callback for pathway rankings per drug_name
+## Callback for ddg by variant
 @app.callback(
-    Output(component_id = "pathway_ranking_by_drug", component_property = "figure"),
-    [Input(component_id = "drug", component_property = "value"),
-    Input(component_id = "dataset_type", component_property = "value")]
+    Output(component_id = "ddg_by_variant", component_property = "figure"),
+    [Input(component_id = "variant", component_property = "value")]
 )
-
-def update_graph7(drug_name, dataset):
-    graph = page3.pathway_ranking_by_drug_plot(drug_name, dataset)
+def update_graph7(variant_name):
+    graph = page3.ddg_by_variant_plot(variant_name, "ddg")
     return graph
-
-
-
 
 @app.callback(Output('page-content', 'children'),
               [Input('url', 'pathname')])
@@ -199,15 +185,8 @@ def display_page(pathname):
         return page2.layout
     if pathname == '/page3':
         return page3.layout
-    else: # if redirected to unknown link
+    else:  # if redirected to unknown link
         return "404 Page Error! Please choose a link"
-
-
-
-
-
-
-
 
 # Run the app on localhost:8050
 if __name__ == '__main__':

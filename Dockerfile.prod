@@ -1,4 +1,4 @@
-FROM python:3.8
+FROM python:3.10
 
 RUN pip install --upgrade pip
 # Create a directory where the code is to be hosted
